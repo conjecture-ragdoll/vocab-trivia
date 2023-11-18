@@ -3,16 +3,32 @@
 // Generate definition of one of them, user matches it with the correct word for points
 //
 //
+import fetch from 'node-fetch';
 
-let rootlinks = {"https://en.wikipedia.org/wiki/List_of_Greek_and_Latin_roots_in_English/A-G" : 7,
-		 "https://en.wikipedia.org/wiki/List_of_Greek_and_Latin_roots_in_English/H-O" : 8,
-	  	 "https://en.wikipedia.org/wiki/List_of_Greek_and_Latin_roots_in_English/P-Z" : 11};
+const fetch = require('node-fetch');
+const cheerio = require('cheerio');
+
+let randomLetter = String.fromCharCode(Math.random() * (86 - 65 + 1) + 65);
+
+/* Generate random letter to append to link to webscrape */
+let rootLetterLink = "https://en.wikipedia.org/wiki/List_of_Greek_and_Latin_roots_in_English/" + randomLetter;
+
+fetch(rootLetterLink, function(error, response, html) {
+	if (error) {
+		console.error('Error: ', error);
+		return;
+	}
+
+	const $ = cheerio.load(html);
+	const table = $(randomLetter);
+
+	const rowCount = document.querySelectorAll('tbody tr').length;
+	console.log(rowCount);
+});
+/* Scrape column for root */
 
 
+/* Generate definition of root */
 
-/* W and Y are not included */
-const randomLetter = (rootlinks) => {
-	let index = Math.floor(Math.random() * rootlinks.length);
-	rootlinks[index]
-}
 
+/* Generate definition of word */
