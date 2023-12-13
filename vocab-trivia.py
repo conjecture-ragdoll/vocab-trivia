@@ -1,6 +1,13 @@
-from pydictionary import Dictionary
+# python3 vocab-trivia.py words_alpha.txt
+
+# word text file from https://github.com/dwyl/english-words
+# from Pydictionary import Dictionary
+import sys
 import random
-from wonderwords import RandomWord
+import pandas as pd
+
+
+#dictionary = PyDictionary()
 
 # Generate random link of certain root word by letter
 root_link = 'https://en.m.wikipedia.org/wiki/List_of_Greek_and_Latin_roots_in_English/'
@@ -13,16 +20,35 @@ root_link_wLetter = root_link + random_letter
 
 
 # Pick a random root word
-# Todo: webscraping
+def show_roots(root_link_wLetter, row):
+    table = pd.read_html(root_link_wLetter)
+    return tuple(table[0]['Root'])
+
+def show_root_meaning(root_link_wLetter, row):
+    table = pd.read_html(root_link_wLetter)
+    return tuple(table[0]['Meaning in English'])
+
+# Test print(len(show_roots(root_link_wLetter, 0)) == len(show_root_meaning(root_link_wLetter, 0)))
+
+
 
 # Generate a word that starts with the root
-dummy = 'de'
 
-random_word = RandomWord()
+def search_txtfile(charseq):    # Search for a word that starts with a char sequence
+    words = open(sys.argv[1])
+    word_list = tuple(words.readlines())
+    return tuple(word for word in word_list if charseq in word)  
 
-rword = random_word.word(starts_with=dummy, word_min_length=12)
+def words_wmin_length(charseq, min_length):
+    return tuple(word for word in search_txtfile(charseq) if len(word) >= int(min_length))
 
-print(rword)
+
+def generate_rword(root, min_length):
+    words = words_wmin_length(root, min_length)
+    return words[random.randrange(len(words))]
+
+print(generate_rword("anthro", 16))
+
 # Parse the following root afterwards and generate another word that starts with it, if the steps fail then repeat previous step of generating a word that starts with root.
 
 
