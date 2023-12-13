@@ -19,24 +19,52 @@ random_letter = possible_starting_letters[random.randrange(0, 24)]
 root_link_wLetter = root_link + random_letter
 
 
+
+
 # Pick a random root word
-def show_roots(root_link_wLetter, row):
+def show_roots(root_link_wLetter):
     table = pd.read_html(root_link_wLetter)
     return tuple(table[0]['Root'])
 
-def show_root_meaning(root_link_wLetter, row):
+def show_root_meaning(root_link_wLetter):
     table = pd.read_html(root_link_wLetter)
     return tuple(table[0]['Meaning in English'])
 
-# Test print(len(show_roots(root_link_wLetter, 0)) == len(show_root_meaning(root_link_wLetter, 0)))
+def show_root_origin(root_link_wLetter):
+    table = pd.read_html(root_link_wLetter)
+    return tuple(table[0]['Origin language'])
 
+def random_row_index(root_link_wLetter):
+    roots = show_roots(root_link_wLetter)
+    return random.randrange(0, len(roots))
 
+def get_root(root_link_wLetter, index_val):
+    return show_roots(root_link_wLetter)[index_val]
+
+def valid_root(character):
+    return (character.isalpha() and character.lower()) or character == '-'
+
+def extract_root(root_str):     # selects random root from row
+    print(root_str)
+    roots = "".join([character for character in root_str if valid_root(character)]).split('-\s*')
+    lucky_root = roots[random.randrange(0, len(roots))]
+    print(len(roots))
+    return lucky_root
+
+def get_root_meaning(root_link_wLetter, index_val):
+    return show_root_meaning(root_link_wLetter)[index_val]
+
+def get_root_origin(root_link_wLetter, index_val):
+    return show_root_origin(root_link_wLetter)[index_val]
+
+print(extract_root(get_root(root_link_wLetter, random_row_index(root_link_wLetter))))
 
 # Generate a word that starts with the root
 
 def search_txtfile(charseq):    # Search for a word that starts with a char sequence
     words = open(sys.argv[1])
     word_list = tuple(words.readlines())
+    words.close()
     return tuple(word for word in word_list if charseq in word)  
 
 def words_wmin_length(charseq, min_length):
