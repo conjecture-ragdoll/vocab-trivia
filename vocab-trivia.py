@@ -20,7 +20,7 @@ root_link_wLetter = root_link + random_letter
 
 
 
-
+#partials
 # Pick a random root word
 def show_roots(root_link_wLetter):
     table = pd.read_html(root_link_wLetter)
@@ -42,13 +42,11 @@ def get_root(root_link_wLetter, index_val):
     return show_roots(root_link_wLetter)[index_val]
 
 def valid_root(character):
-    return (character.isalpha() and character.lower()) or character == '-'
+    return (character.isalpha() and character.islower()) or character == '-'
 
 def extract_root(root_str):     # selects random root from row
-    print(root_str)
-    roots = "".join([character for character in root_str if valid_root(character)]).split('-\s*')
+    roots = tuple(filter(None, ''.join([character for character in root_str if valid_root(character)]).split('-')))
     lucky_root = roots[random.randrange(0, len(roots))]
-    print(len(roots))
     return lucky_root
 
 def get_root_meaning(root_link_wLetter, index_val):
@@ -57,7 +55,8 @@ def get_root_meaning(root_link_wLetter, index_val):
 def get_root_origin(root_link_wLetter, index_val):
     return show_root_origin(root_link_wLetter)[index_val]
 
-print(extract_root(get_root(root_link_wLetter, random_row_index(root_link_wLetter))))
+random_root = extract_root(get_root(root_link_wLetter, random_row_index(root_link_wLetter)))
+print(random_root)
 
 # Generate a word that starts with the root
 
@@ -67,15 +66,15 @@ def search_txtfile(charseq):    # Search for a word that starts with a char sequ
     words.close()
     return tuple(word for word in word_list if charseq in word)  
 
-def words_wmin_length(charseq, min_length):
+def words_wmin_length(charseq, min_length):     # empty??
     return tuple(word for word in search_txtfile(charseq) if len(word) >= int(min_length))
 
 
-def generate_rword(root, min_length):
+def generate_rword(root, min_length):   # watch out if there exists a min length with root word
     words = words_wmin_length(root, min_length)
     return words[random.randrange(len(words))]
 
-print(generate_rword("anthro", 16))
+print(generate_rword(random_root, 16))
 
 # Parse the following root afterwards and generate another word that starts with it, if the steps fail then repeat previous step of generating a word that starts with root.
 
