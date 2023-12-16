@@ -55,7 +55,9 @@ def get_root_meaning(root_link_wLetter, index_val):
 def get_root_origin(root_link_wLetter, index_val):
     return show_root_origin(root_link_wLetter)[index_val]
 
-random_root = extract_root(get_root(root_link_wLetter, random_row_index(root_link_wLetter)))
+def random_root():
+    return extract_root(get_root(root_link_wLetter, random_row_index(root_link_wLetter)))
+
 print(random_root)
 
 # Generate a word that starts with the root
@@ -66,12 +68,20 @@ def search_txtfile(charseq):    # Search for a word that starts with a char sequ
     words.close()
     return tuple(word for word in word_list if charseq in word)  
 
-def words_wmin_length(charseq, min_length):     # empty??
-    return tuple(word for word in search_txtfile(charseq) if len(word) >= int(min_length))
+def words_wmin_length(charseq, min_length):     # empty?
+    words = search_txtfile(charseq)
+    return tuple(word for word in words if len(word) >= int(min_length))
 
+def find_longest(charseq, min_length):
+    rwords = words_wmin_length(charseq, min_length)
+    if rwords != ():
+        return rwords
+    if len(charseq) == min_length:
+        return ()
+    return find_longest(charseq, min_length - 1)
 
 def generate_rword(root, min_length):   # watch out if there exists a min length with root word
-    words = words_wmin_length(root, min_length)
+    words = find_longest(root, min_length)
     return words[random.randrange(len(words))]
 
 print(generate_rword(random_root, 16))
