@@ -1,13 +1,13 @@
 # python3 vocab-trivia.py words_alpha.txt
 
 # word text file from https://github.com/dwyl/english-words
-# from Pydictionary import Dictionary
+from PyDictionary import PyDictionary
 import sys
 import random
 import pandas as pd
 
 
-#dictionary = PyDictionary()
+dictionary = PyDictionary()
 
 # Generate random link of certain root word by letter
 root_link = 'https://en.m.wikipedia.org/wiki/List_of_Greek_and_Latin_roots_in_English/'
@@ -58,7 +58,6 @@ def get_root_origin(root_link_wLetter, index_val):
 def random_root():
     return extract_root(get_root(root_link_wLetter, random_row_index(root_link_wLetter)))
 
-print(random_root)
 
 # Generate a word that starts with the root
 
@@ -80,11 +79,12 @@ def find_longest(charseq, min_length):
         return ()
     return find_longest(charseq, min_length - 1)
 
-def generate_rword(root, min_length):   # watch out if there exists a min length with root word
+def generate_rword(root, min_length):   # TODO: watch out if there exists a min length with root word
     words = find_longest(root, min_length)
     return words[random.randrange(len(words))]
 
-print(generate_rword(random_root, 16))
+rword = generate_rword(random_root(), 13)
+print(rword)
 
 # Parse the following root afterwards and generate another word that starts with it, if the steps fail then repeat previous step of generating a word that starts with root.
 
@@ -96,8 +96,11 @@ print(generate_rword(random_root, 16))
 
 
 # Pick a random word, find definition
+def define_word(lucky_word):    # if PyDictionary doesnt include word, use other dictionaries
+    return dictionary.meaning(lucky_word)
 
-
+print(define_word(rword))
+print(define_word("totalitarianism"))
 # Display definition and display 6 words
 
 
