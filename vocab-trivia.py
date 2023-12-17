@@ -10,36 +10,36 @@ import pandas as pd
 dictionary = PyDictionary()
 
 # Generate random link of certain root word by letter
-root_link = 'https://en.m.wikipedia.org/wiki/List_of_Greek_and_Latin_roots_in_English/'
+wroot_link = 'https://en.m.wikipedia.org/wiki/List_of_Greek_and_Latin_roots_in_English/'
 
 # But ignore W and Y
 possible_starting_letters = 'ABCDEFGHIJKLMNOPQRSTUVXZ'
+
 random_letter = possible_starting_letters[random.randrange(0, 24)]
 
-root_link_wLetter = root_link + random_letter
-
-
+def root_link(starting_letter):
+    return wroot_link + starting_letter.upper()
 
 #partials
 # Pick a random root word
-def show_roots(root_link_wLetter):
-    table = pd.read_html(root_link_wLetter)
+def show_roots(starting_letter):
+    table = tuple(pd.read_html(root_link(starting_letter)))
     return tuple(table[0]['Root'])
 
-def show_root_meaning(root_link_wLetter):
-    table = pd.read_html(root_link_wLetter)
+def show_root_meaning(starting_letter):
+    table = tuple(pd.read_html(root_link(starting_letter)))
     return tuple(table[0]['Meaning in English'])
 
-def show_root_origin(root_link_wLetter):
-    table = pd.read_html(root_link_wLetter)
+def show_root_origin(starting_letter):
+    table = tuple(pd.read_html(root_link(starting_letter)))
     return tuple(table[0]['Origin language'])
 
-def random_row_index(root_link_wLetter):
-    roots = show_roots(root_link_wLetter)
+def get_row_index(starting_letter):
+    roots = show_roots(root_link(starting_letter))
     return random.randrange(0, len(roots))
 
-def get_root(root_link_wLetter, index_val):
-    return show_roots(root_link_wLetter)[index_val]
+def get_root(starting_letter, index_val):
+    return show_roots(root_link(starting_letter))[index_val]
 
 def valid_root(character):
     return (character.isalpha() and character.islower()) or character == '-'
@@ -49,14 +49,10 @@ def extract_root(root_str):     # selects random root from row
     lucky_root = roots[random.randrange(0, len(roots))]
     return lucky_root
 
-def get_root_meaning(root_link_wLetter, index_val):
-    return show_root_meaning(root_link_wLetter)[index_val]
 
-def get_root_origin(root_link_wLetter, index_val):
-    return show_root_origin(root_link_wLetter)[index_val]
 
 def random_root():
-    return extract_root(get_root(root_link_wLetter, random_row_index(root_link_wLetter)))
+    return extract_root(get_root(root_link(random_letter), ge_row_index(root_link(random_letter))))
 
 
 # Generate a word that starts with the root
@@ -83,7 +79,9 @@ def generate_rword(root, min_length):   # TODO: watch out if there exists a min 
     words = find_longest(root, min_length)
     return words[random.randrange(len(words))]
 
-rword = generate_rword(random_root(), 13)
+lucky_root = random_root();
+print(lucky_root);
+rword = generate_rword(lucky_root, 13)
 print(rword)
 
 # Parse the following root afterwards and generate another word that starts with it, if the steps fail then repeat previous step of generating a word that starts with root.
@@ -100,10 +98,12 @@ def define_word(lucky_word):    # if PyDictionary doesnt include word, use other
     return dictionary.meaning(lucky_word)
 
 print(define_word(rword))
-print(define_word("totalitarianism"))
 # Display definition and display 6 words
+def get_root_meaning(root):
+    table = tuple(pd.read_html(root_link(random_letter)))
+    return tuple(table[0]['Meaning in English']).index(root)
 
-
+print(get_root_meaning(lucky_root))
 # Display hint (reveals definition of a root)
 
 
