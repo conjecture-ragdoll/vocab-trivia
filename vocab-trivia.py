@@ -1,10 +1,12 @@
 # python3 vocab-trivia.py words_alpha.txt
+from nltk.corpus import wordnet
 
 # word text file from https://github.com/dwyl/english-words
 from PyDictionary import PyDictionary
 import sys
 import random
 import pandas as pd
+from py_thesaurus import Thesaurus
 
 
 dictionary = PyDictionary()
@@ -81,23 +83,23 @@ def find_longest(charseq, min_length):
 
 def generate_rword(root, min_length):   # TODO: watch out if there exists a min length with root word
     words = find_longest(root, min_length)
+    if words == ():
+        pass
     return words[random.randrange(len(words))]
 
+# Pick a random word, find definition
+def get_syns(lucky_word):
+    return wordnet.synsets(lucky_word)
 
 # Parse the following root afterwards and generate another word that starts with it, if the steps fail then repeat previous step of generating a word that starts with root.
 
 
 # Generate 6 words this way
-
+words6 = []
 
 # For roots that are parsed from words, find the definition to store in dict
 
 
-# Pick a random word, find definition
-def define_word(lucky_word):    # if PyDictionary doesnt include word, use other dictionaries
-    return dictionary.meaning(lucky_word)
-
-print(define_word(rword))
 # Display definition and display 6 words
 
 
@@ -118,3 +120,4 @@ print(define_word(rword))
 rword = generate_rword(random_root(), 13)
 print(rword)
 
+print(get_syns(rword))
