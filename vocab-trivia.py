@@ -1,13 +1,13 @@
 # python3 vocab-trivia.py words_alpha.txt
 from nltk.corpus import wordnet
-
+import requests
 # word text file from https://github.com/dwyl/english-words
 from PyDictionary import PyDictionary
 import sys
 import random
 import pandas as pd
 from py_thesaurus import Thesaurus
-
+from bs4 import BeautifulSoup
 
 dictionary = PyDictionary()
 
@@ -88,14 +88,23 @@ def generate_rword(root, min_length):   # TODO: watch out if there exists a min 
     return words[random.randrange(len(words))]
 
 # Pick a random word, find definition
-def get_syns(lucky_word):
-    return wordnet.synsets(lucky_word)
+def wikitionary_search(word_to_define):
+    url_str = 'http://en.wiktionary.org/wiki/' + word_to_define
+    response = requests.get(url_str.replace('\n',''))
 
+    print(response.status_code)    
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, 'html.parser')
+        ol = soup.find('ol')
+        items = [item.text.strip() for item in ol.find_all('li')] if ol else []
+        
+        return items    
+    else:
+        return None
 # Parse the following root afterwards and generate another word that starts with it, if the steps fail then repeat previous step of generating a word that starts with root.
 
 
 # Generate 6 words this way
-words6 = []
 
 # For roots that are parsed from words, find the definition to store in dict
 
@@ -117,7 +126,7 @@ words6 = []
 
 # save score and repeat
 
-rword = generate_rword(random_root(), 13)
+rword = generate_rword(random_root(), 18)
 print(rword)
 
-print(get_syns(rword))
+print(wikitionary_search(rword))
