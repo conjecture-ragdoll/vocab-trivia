@@ -1,4 +1,5 @@
 # python3 vocab-trivia.py words_alpha.txt
+import re
 from nltk.corpus import wordnet
 import requests
 # word text file from https://github.com/dwyl/english-words
@@ -20,9 +21,6 @@ random_letter = possible_starting_letters[random.randrange(0, 24)]
 
 root_link_wLetter = root_link + random_letter
 
-
-
-#partials
 # Pick a random root word
 def show_roots(root_link_wLetter):
     table = pd.read_html(root_link_wLetter)
@@ -87,6 +85,17 @@ def generate_rword(root, min_length):   # TODO: watch out if there exists a min 
         pass
     return words[random.randrange(len(words))]
 
+def clickable_text():	#TODO: replaces clickable text with their definition and expands self defining words
+    pass
+
+
+def handle_definition(word_to_define, definitions):	# Ignore definitions that use the same word
+    useable_defs = [x for x in definitions if word_to_define not in x]
+    
+    return useable_defs[0] if word_to_define not in useable_defs[0] else None
+
+    
+
 # Pick a random word, find definition
 def wikitionary_search(word_to_define):
     url_str = 'http://en.wiktionary.org/wiki/' + word_to_define
@@ -98,10 +107,20 @@ def wikitionary_search(word_to_define):
         ol = soup.find('ol')
         items = [item.text.strip() for item in ol.find_all('li')] if ol else []
         
-        return items    
+        return handle_definition(word_to_define, items)    
     else:
         return None
+
+
+def roots_by_letter(lucky_letter):
+
+    raw_roots = show_roots(root_link + lucky_letter.upper())
+    
+    roots = tuple(filter(None, ''.join([character for character in raw_roots if valid_root(character)]).split('-')))
+    return roots
+
 # Parse the following root afterwards and generate another word that starts with it, if the steps fail then repeat previous step of generating a word that starts with root.
+
 
 
 # Generate 6 words this way
@@ -130,3 +149,5 @@ rword = generate_rword(random_root(), 18)
 print(rword)
 
 print(wikitionary_search(rword))
+
+print(roots_by_letter('R'))
