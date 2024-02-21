@@ -44,6 +44,14 @@ def get_root(root_link_wLetter, index_val):
 def valid_root(character):
     return (character.isalpha() and character.islower()) or character == '-'
 
+def valid_root_letter(character):
+    return (character.isalpha() and character.islower())
+
+def process_roots(root_letter):
+    roots = show_roots(root_link + root_letter.upper())
+    return roots
+
+
 def extract_root(root_str):     # selects random root from row
     roots = tuple(filter(None, ''.join([character for character in root_str if valid_root(character)]).split('-')))
     lucky_root = roots[random.randrange(0, len(roots))]
@@ -117,7 +125,7 @@ def roots_by_letter(lucky_letter):
     raw_roots = show_roots(root_link + lucky_letter.upper())
     
     roots = tuple(filter(None, ''.join([character for character in raw_roots if valid_root(character)]).split('-')))
-    return roots
+    return raw_roots
 
 # Parse the following root afterwards and generate another word that starts with it, if the steps fail then repeat previous step of generating a word that starts with root.
 
@@ -149,5 +157,4 @@ rword = generate_rword(random_root(), 18)
 print(rword)
 
 print(wikitionary_search(rword))
-
 print(roots_by_letter('R'))
