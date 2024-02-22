@@ -47,10 +47,15 @@ def valid_root(character):
 def valid_root_letter(character):
     return (character.isalpha() and character.islower())
 
-def process_roots(root_letter):
-    roots = show_roots(root_link + root_letter.upper())
-    return roots
+def process_roots(root_str):
+    roots = ''.join([x for x in root_str if valid_root_letter(x) or x == ","])
+    root_list = re.split(",", roots)
+    return root_list
 
+def get_roots_by_letter(root_letter):
+    roots = show_roots(root_link + root_letter.upper())
+    root_list = map(process_roots, roots)
+    return list(root_list)
 
 def extract_root(root_str):     # selects random root from row
     roots = tuple(filter(None, ''.join([character for character in root_str if valid_root(character)]).split('-')))
@@ -119,17 +124,18 @@ def wikitionary_search(word_to_define):
     else:
         return None
 
-
-def roots_by_letter(lucky_letter):
-
-    raw_roots = show_roots(root_link + lucky_letter.upper())
-    
-    roots = tuple(filter(None, ''.join([character for character in raw_roots if valid_root(character)]).split('-')))
-    return raw_roots
-
 # Parse the following root afterwards and generate another word that starts with it, if the steps fail then repeat previous step of generating a word that starts with root.
 
+def roots_in_word_by_index(lucky_word, index): #TODO: Avoid w's or root letters not able to be scraped
+    roots = [r for root in get_roots_by_letter(lucky_word[index]) for r in root]
+    present_roots = [x for x in roots if x in lucky_word]
+    return set(present_roots)
 
+def roots_in_word(lucky_word):
+    present_roots = []
+    for x in range(len(lucky_word)):     
+        present_roots.append(roots_in_word_by_index(lucky_word, x))
+    return present_roots
 
 # Generate 6 words this way
 
@@ -157,4 +163,4 @@ rword = generate_rword(random_root(), 18)
 print(rword)
 
 print(wikitionary_search(rword))
-print(roots_by_letter('R'))
+print(roots_in_word(rword))
