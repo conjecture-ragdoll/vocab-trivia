@@ -132,9 +132,8 @@ def roots_in_word_by_index(lucky_word, index): #TODO: Avoid w's or root letters 
     return set(present_roots)
 
 def roots_in_word(lucky_word):
-    present_roots = []
-    for x in range(len(lucky_word)):     
-        present_roots.append(roots_in_word_by_index(lucky_word, x))
+    word = lucky_word.strip()
+    present_roots = [roots_in_word_by_index(word, x) for x in range(len(word))]
     return present_roots
 
 # Generate 6 words this way
