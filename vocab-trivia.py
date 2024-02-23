@@ -126,19 +126,42 @@ def wikitionary_search(word_to_define):
 
 # Parse the following root afterwards and generate another word that starts with it, if the steps fail then repeat previous step of generating a word that starts with root.
 
+def remove_duplicate_roots(nested_set):
+    flattened = set()
+    for x in nested_set:
+        if isinstance(x, set):
+            flattened.update(remove_duplicate_roots(x))
+        else:
+            flattened.add(x)
+    return flattened
+
 def roots_in_word_by_index(lucky_word, index): #TODO: Avoid w's or root letters not able to be scraped
-    roots = [r for root in get_roots_by_letter(lucky_word[index]) for r in root]
-    present_roots = [x for x in roots if x in lucky_word]
-    return set(present_roots)
+    if lucky_word[index] == 'w' or lucky_word[index] == 'y':
+        return ''
+    else:
+        roots = [r for root in get_roots_by_letter(lucky_word[index]) for r in root]
+        present_roots = [x for x in roots if x in lucky_word]
+        return set(present_roots)
 
 def roots_in_word(lucky_word):
     word = lucky_word.strip()
-    present_roots = [roots_in_word_by_index(word, x) for x in range(len(word))]
-    return present_roots
+    present_roots = [roots_in_word_by_index(word, x) for x in range(len(word))] 
+    return remove_duplicate_roots(present_roots)
+
+def other_root(lucky_word): 	# choses longest root
+    find_longest = max(roots_in_word(lucky_word), key=len, default=None)
+    return find_longest
 
 # Generate 6 words this way
+def words_with_root(root, min_length, word_count):
+    #attempts to generate word_count number of words
+    word_list = {generate_rword(root, min_length) for x in range(word_count)}
+    return word_list
 
 # For roots that are parsed from words, find the definition to store in dict
+def root_definitions(root_set):
+    definitions = {root: None for root in root_set if get_roots_by_letter(root[0]).index(root)}
+    return definitions
 
 
 # Display definition and display 6 words
@@ -163,3 +186,4 @@ print(rword)
 
 print(wikitionary_search(rword))
 print(roots_in_word(rword))
+print(words_with_root(other_root(rword), 18, 6))
