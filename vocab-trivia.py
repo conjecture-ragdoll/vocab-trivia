@@ -31,6 +31,7 @@ def show_root_meaning(root_link_wLetter):
     return tuple(table[0]['Meaning in English'])
 
 def show_root_origin(root_link_wLetter):
+    print(list(enumerate(get_roots_by_letter("a"))).index('a'))
     table = pd.read_html(root_link_wLetter)
     return tuple(table[0]['Origin language'])
 
@@ -159,10 +160,11 @@ def words_with_root(root, min_length, word_count):
     return word_list
 
 # For roots that are parsed from words, find the definition to store in dict
-def root_definitions(root_set):
-    definitions = {root: None for root in root_set if get_roots_by_letter(root[0]).index(root)}
-    return definitions
-
+def root_definition(lucky_root): # pass in roots_in_word(lucky_word) function
+    roots_by_letter = get_roots_by_letter(lucky_root[0])
+    definition_list = show_root_meaning(root_link + lucky_root[0].upper())
+    root_occurences_def = [definition_list[i] for i, row in enumerate(roots_by_letter) for j, element in enumerate(row) if element == lucky_root]
+    return root_occurences_def
 
 # Display definition and display 6 words
 
@@ -187,3 +189,4 @@ print(rword)
 print(wikitionary_search(rword))
 print(roots_in_word(rword))
 print(words_with_root(other_root(rword), 18, 6))
+print(root_definition('a'))
