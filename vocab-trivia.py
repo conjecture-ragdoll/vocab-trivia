@@ -114,8 +114,6 @@ def handle_definition(word_to_define, definitions):	# Ignore definitions that us
 def wikitionary_search(word_to_define):
     url_str = 'http://en.wiktionary.org/wiki/' + word_to_define
     response = requests.get(url_str.replace('\n',''))
-
-    print(response.status_code)    
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
         ol = soup.find('ol')
@@ -166,7 +164,14 @@ def root_definition(lucky_root): # pass in roots_in_word(lucky_word) function
     root_occurences_def = [definition_list[i] for i, row in enumerate(roots_by_letter) for j, element in enumerate(row) if element == lucky_root]
     return root_occurences_def
 
+def select_word(word_length_min): 	# selects random word with a definition that can be searched
+    random_word = generate_rword(random_root(), word_length_min)
+    while(wikitionary_search(random_word) == None):        random_word = generate_rword(random_root(), word_length_min)
+    return random_word        
+
+
 # Display definition and display 6 words
+
 
 
 # Display hint (reveals definition of a root)
@@ -182,11 +187,11 @@ def root_definition(lucky_root): # pass in roots_in_word(lucky_word) function
 
 
 # save score and repeat
-
-rword = generate_rword(random_root(), 18)
+rword = select_word(18)
 print(rword)
 
 print(wikitionary_search(rword))
 print(roots_in_word(rword))
 print(words_with_root(other_root(rword), 18, 6))
-print(root_definition('a'))
+print(root_definition('non'))
+
