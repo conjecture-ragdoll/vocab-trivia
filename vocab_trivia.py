@@ -147,11 +147,15 @@ def roots_in_word(lucky_word):
     present_roots = [roots_in_word_by_index(word, x) for x in range(len(word))] 
     return remove_duplicate_roots(present_roots)
 
+def roots_in_word_list(lucky_word):	# convert set to a list of roots to be indexed
+    return list(roots_in_word(lucky_word))
+
 def other_root(lucky_word): 	# choses longest root
     find_longest = max(roots_in_word(lucky_word), key=len, default=None)
     return find_longest
 
 # Generate 6 words this way
+#TODO avoid generating the same word
 def words_with_root(root, min_length, word_count):
     #attempts to generate word_count number of words
     word_list = {generate_rword(root, min_length) for x in range(word_count)}
@@ -187,11 +191,4 @@ def select_word(word_length_min): 	# selects random word with a definition that 
 
 
 # save score and repeat
-rword = select_word(18)
-print(rword)
-
-print(wikitionary_search(rword))
-print(roots_in_word(rword))
-print(words_with_root(other_root(rword), 18, 6))
-print(root_definition('non'))
 
