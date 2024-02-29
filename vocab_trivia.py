@@ -174,8 +174,10 @@ def select_word(word_length_min): 	# selects random word with a definition that 
     return random_word        
 
 
-# Display definition and display 6 words
+def check_word(two_word_list):	# compare if user selected correct word
+    return two_word_list[0] == two_word_list[1]
 
+# Display definition and display 6 words
 
 
 # Display hint (reveals definition of a root)
