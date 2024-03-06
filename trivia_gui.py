@@ -61,7 +61,7 @@ class VocabTriviaGUI(QMainWindow):
         # Update the text of the message_label
         self.message_label.setText(message)
 
-
+    #TODO: Index definitions for roots, and write requirements.txt file
 def main():
     app = QApplication(sys.argv)
     window = VocabTriviaGUI()
