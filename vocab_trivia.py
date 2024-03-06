@@ -161,6 +161,7 @@ def words_with_root(root, min_length, word_count):
     word_list = {generate_rword(root, min_length) for x in range(word_count)}
     return word_list
 
+
 # For roots that are parsed from words, find the definition to store in dict
 def root_definition(lucky_root): # pass in roots_in_word(lucky_word) function
     roots_by_letter = get_roots_by_letter(lucky_root[0])
@@ -174,8 +175,6 @@ def select_word(word_length_min): 	# selects random word with a definition that 
     return random_word        
 
 
-def check_word(two_word_list):	# compare if user selected correct word
-    return two_word_list[0] == two_word_list[1]
 
 # Display definition and display 6 words
 
