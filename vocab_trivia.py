@@ -1,16 +1,12 @@
 # python3 vocab-trivia.py words_alpha.txt
 import re
-from nltk.corpus import wordnet
 import requests
 # word text file from https://github.com/dwyl/english-words
-from PyDictionary import PyDictionary
 import sys
 import random
 import pandas as pd
-from py_thesaurus import Thesaurus
 from bs4 import BeautifulSoup
 
-dictionary = PyDictionary()
 
 # Generate random link of certain root word by letter
 root_link = 'https://en.m.wikipedia.org/wiki/List_of_Greek_and_Latin_roots_in_English/'
