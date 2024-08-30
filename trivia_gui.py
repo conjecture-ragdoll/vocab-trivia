@@ -80,6 +80,7 @@ class VocabTriviaGUI(QMainWindow):
         # Update the text of the message_label
         self.message_label.setText(message)
 
+"""
 def main():
     app = QApplication(sys.argv)
     window = VocabTriviaGUI()
@@ -88,4 +89,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
+"""
