@@ -170,7 +170,7 @@ def select_word(word_length_min): 	# selects random word with a definition that 
     while(wikitionary_search(random_word) == None):        random_word = generate_rword(random_root(), word_length_min)
     return random_word        
 
-
+print('welcome to vocab trivia')
 
 # Display definition and display 6 words
 

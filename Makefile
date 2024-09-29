@@ -1,5 +1,11 @@
 
+build:
+
+	docker build -t vocab-trivia-app .
+
+
 run:
-	python3 trivia_gui.py words_alpha.txt
+	docker run --rm vocab-trivia-app
+
 
 
