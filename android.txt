@@ -1,0 +1,3 @@
+title=<Vocab_Trivia>
+author=<Flora Afroza>
+orientation=<portrait>

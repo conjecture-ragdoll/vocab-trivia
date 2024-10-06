@@ -1,11 +1,13 @@
 
 build:
 
-	docker build -t vocab-trivia-app .
+	docker build --tag=buildozer -t vocab-trivia-app .
 
 
 run:
-	docker run --rm vocab-trivia-app
+	docker run --volume $(pwd):/home/user/hostcwd kivy/buildozer init
+
+
 
 
 
